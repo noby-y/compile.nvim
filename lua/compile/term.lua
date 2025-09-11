@@ -95,12 +95,14 @@ end
 
 --- Send command to terminal
 ---
----@param cmd string Command to execute
+---@param cmd string? Command to execute
 function compile.term.send_cmd(cmd)
 	local line_count = vim.api.nvim_buf_line_count(compile.term.state.buf)
 	vim.api.nvim_win_set_cursor(compile.term.state.win, { line_count, 0 })
-	local terminator = compile.term.get_terminator()
-	vim.api.nvim_chan_send(compile.term.state.channel, cmd .. terminator)
+	if cmd then
+		local terminator = compile.term.get_terminator()
+		vim.api.nvim_chan_send(compile.term.state.channel, cmd .. terminator)
+	end
 end
 
 --- Attach warning parsing to terminal buffer
